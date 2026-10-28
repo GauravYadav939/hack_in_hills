@@ -1,0 +1,22 @@
+# Core Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Cryptography
+PyNaCl==1.5.0
+
+# Database
+aiosqlite==0.19.0
+
+# HTTP Client for Ollama
+httpx==0.25.1
+
+# Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+
+# Development
+python-dotenv==1.0.0

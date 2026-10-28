@@ -1,0 +1,96 @@
+version: '3.8'
+
+services:
+  # Ollama - AI Model Service
+  ollama:
+    image: ollama/ollama:latest
+    container_name: glasshouse-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    networks:
+      - glasshouse-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Policy Broker (Person 2 Component)
+  broker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: glasshouse-broker
+    ports:
+      - "8000:8000"
+    environment:
+      - BROKER_HOST=0.0.0.0
+      - BROKER_PORT=8000
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_MODEL=llama3.2:3b
+      - OLLAMA_TIMEOUT=30
+      - TOKEN_SIGNING_KEY=${TOKEN_SIGNING_KEY}
+      - AUDIT_SIGNING_KEY=${AUDIT_SIGNING_KEY}
+      - TOKEN_EXPIRATION_SECONDS=300
+      - AUDIT_DB_PATH=/app/data/audit.db
+      - TIMING_NORMALIZATION_ENABLED=true
+      - TIMING_NORMALIZATION_TARGET=2.0
+      - POLICY_FILE_PATH=/app/config/policy.json
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./backend/app:/app/app
+      - ./config:/app/config
+      - broker-data:/app/data
+    networks:
+      - glasshouse-network
+    depends_on:
+      - ollama
+    restart: unless-stopped
+
+  # Frontend Dashboard
+  dashboard:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: glasshouse-dashboard
+    ports:
+      - "3000:80"
+    networks:
+      - glasshouse-network
+    depends_on:
+      - broker
+    restart: unless-stopped
+
+  # Red Zone (Attacker) - Placeholder
+  # Person 1 will implement this
+  red-zone:
+    image: alpine:latest
+    container_name: glasshouse-red
+    command: sleep infinity
+    networks:
+      - glasshouse-network
+    restart: unless-stopped
+
+  # Blue Zone (Defender) - Placeholder
+  # Person 1 will implement this
+  blue-zone:
+    image: alpine:latest
+    container_name: glasshouse-blue
+    command: sleep infinity
+    networks:
+      - glasshouse-network
+    restart: unless-stopped
+
+networks:
+  glasshouse-network:
+    driver: bridge
+    name: glasshouse-network
+
+volumes:
+  ollama-data:
+    name: glasshouse-ollama-data
+  broker-data:
+    name: glasshouse-broker-data

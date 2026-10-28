@@ -1,0 +1,62 @@
+{
+  "version": "1.0.0",
+  "default_decision": "deny",
+  "rules": [
+    {
+      "name": "blue-can-infer",
+      "source_zone": "blue",
+      "action": "infer",
+      "allowed": true,
+      "conditions": {}
+    },
+    {
+      "name": "blue-can-access-defense",
+      "source_zone": "blue",
+      "action": "defense",
+      "allowed": true,
+      "conditions": {}
+    },
+    {
+      "name": "blue-can-access-payload",
+      "source_zone": "blue",
+      "action": "payload",
+      "allowed": true,
+      "conditions": {}
+    },
+    {
+      "name": "red-can-infer",
+      "source_zone": "red",
+      "action": "infer",
+      "allowed": true,
+      "conditions": {}
+    },
+    {
+      "name": "red-cannot-access-defense",
+      "source_zone": "red",
+      "action": "defense",
+      "allowed": false,
+      "conditions": {}
+    },
+    {
+      "name": "red-cannot-access-payload",
+      "source_zone": "red",
+      "action": "payload",
+      "allowed": false,
+      "conditions": {}
+    },
+    {
+      "name": "anyone-can-health-check",
+      "source_zone": "red",
+      "action": "health",
+      "allowed": true,
+      "conditions": {}
+    },
+    {
+      "name": "blue-can-health-check",
+      "source_zone": "blue",
+      "action": "health",
+      "allowed": true,
+      "conditions": {}
+    }
+  ]
+}
