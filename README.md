@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Glasshouse - AI Security Testing Environment
 
 ## Project Overview
@@ -140,3 +141,6 @@ Building Phase C: Core backend implementation
 ## License
 
 Educational project for security testing demonstration
+=======
+# hack_in_hills
+>>>>>>> 8b3668b43dde7b330f8d3950eeb5f19b39cc7208
